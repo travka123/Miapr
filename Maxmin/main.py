@@ -43,12 +43,12 @@ while True:
 
     link_to_cores()
 
-clusters = [[] for _ in range(cores.size)]
+clusters = [[[], []] for _ in range(cores.size)]
 for i in range(n):
-    clusters[binding[i]].append(data[i])
+    clusters[binding[i]][0].append(data[i][0])
+    clusters[binding[i]][1].append(data[i][1])
 
 for cluster in clusters:
-    plt.scatter([point[0] for point in cluster], [point[1] for point in cluster])
+    plt.scatter(cluster[0], cluster[1])
 plt.scatter([data[index][0] for index in cores], [data[index][1] for index in cores], color='black')
 plt.show()
-
