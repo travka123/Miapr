@@ -10,6 +10,9 @@ def link_cores(data, cores, binding):
     start = cuda.grid(1)
     stride = cuda.gridsize(1)
 
+    cuda.const.array_like(data)
+    cuda.const.array_like(cores)
+
     for i in range(start, data.shape[0], stride):
         cluster_index = 0
         class_distance = 2 # > sqrt(1*1 + 1*1)
@@ -27,6 +30,9 @@ def count_deviation(data, binding, deviation):
     start = cuda.grid(1)
     stride = cuda.gridsize(1)
 
+    cuda.const.array_like(data)
+    cuda.const.array_like(binding)
+
     for i in range(start, data.shape[0], stride):
         cluster_index = binding[i]
         current_deviation = 0
@@ -40,7 +46,7 @@ def count_deviation(data, binding, deviation):
 def set_cores(cores, binding, deviation):
     changed = False
     for i in range(deviation.size):
-        if (deviation[i] < deviation[cores[binding[i]]]):
+        if deviation[i] < deviation[cores[binding[i]]]:
             cores[binding[i]] = i
             changed = True
     return changed
@@ -56,19 +62,18 @@ data = np.random.rand(n, 2)
 cores = np.arange(k)
 
 data_device = cuda.to_device(data)
+binding_device = cuda.device_array(shape=(n,), dtype=int)
+deviation_device = cuda.device_array(shape=(n,), dtype=np.float32)
 
 threads_per_block = 128
-blocks_per_grid = 272
+blocks_per_grid = 512
 
 binding = None
 stop = False
 while not stop:
-    binding_device = cuda.device_array(shape=(n,), dtype=int)
     cores_device = cuda.to_device(cores)
 
     link_cores[blocks_per_grid, threads_per_block](data_device, cores_device, binding_device)
-
-    deviation_device = cuda.device_array(shape=(n,), dtype=np.float32)
 
     count_deviation[blocks_per_grid, threads_per_block](data_device, binding_device, deviation_device)
 
