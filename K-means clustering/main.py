@@ -1,4 +1,5 @@
 import sys
+
 from scipy.spatial import distance
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,42 +14,32 @@ n = int(sys.argv[2])
 MAX_DISTANCE = distance.euclidean([0, 0], [1, 1])
 
 data = np.random.rand(n, 2)
-cores = data[:k]
+centers = data[:k]
 
 stop = False
 clusters = None
 while not stop:
     stop = True
-    clusters = [[] for x in range(k)]
+    clusters = [[[], []] for x in range(k)]
 
     for vector in data:
         cluster_index = 0
         class_distance = MAX_DISTANCE
         for i in range(k):
-            current_distance = distance.euclidean(vector, cores[i])
+            current_distance = distance.euclidean(vector, centers[i])
             if class_distance > current_distance:
                 cluster_index = i
                 class_distance = current_distance
-        clusters[cluster_index].append(vector)
+        clusters[cluster_index][0].append(vector[0])
+        clusters[cluster_index][1].append(vector[1])
 
     for i in range(k):
-        current_cluster = clusters[i]
-        next_cluster_core = None
-        core_deviation = MAX_DISTANCE
-        for current_vector in current_cluster:
-            current_deviation = 0
-            for vector in current_cluster:
-                current_deviation += distance.euclidean(current_vector, vector)
-            current_deviation /= len(current_cluster)
-            if core_deviation > current_deviation:
-                next_cluster_core = current_vector
-                core_deviation = current_deviation
-        if not np.array_equal(cores[i], next_cluster_core):
-            cores[i] = next_cluster_core
+        next_center = np.average(clusters[i], axis=1)
+        if any(centers[i] != next_center):
+            centers[i] = next_center
             stop = False
 
 for cluster in clusters:
-    plt.scatter([point[0] for point in cluster], [point[1] for point in cluster])
-plt.scatter([point[0] for point in cores], [point[1] for point in cores], color='black')
+    plt.scatter(cluster[0], cluster[1])
+plt.scatter([vector[0] for vector in centers], [vector[1] for vector in centers], color='black')
 plt.show()
-
