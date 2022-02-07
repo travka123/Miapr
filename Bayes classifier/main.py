@@ -18,24 +18,34 @@ pc2 = 1 - pc1
 
 range = (min(np.min(data1), np.min(data2)), max(np.max(data1), np.max(data2)))
 
-x = np.linspace(range[0], range[1], 1000)
-rate1 = stats.norm.pdf(x, mu1, sigma1) * pc1
-rate2 = stats.norm.pdf(x, mu2, sigma2) * pc2
+x = np.linspace(range[0], range[1], 10000)
+y1 = stats.norm.pdf(x, mu1, sigma1) * pc1
+y2 = stats.norm.pdf(x, mu2, sigma2) * pc2
 
-rate1_max = np.argmax(rate1)
-rate2_max = np.argmax(rate2)
+intersection_area_start = np.argmax(y1)
+intersection_area_end = np.argmax(y2)
 
-intersection = rate1_max + np.argmin(np.abs(rate1[rate1_max:rate2_max] - rate2[rate1_max:rate2_max]))
+count_for_second = not intersection_area_start < intersection_area_end
+first, second = (y1, y2) if (intersection_area_start < intersection_area_end) else (y2, y1)
 
-false_alert = np.sum(rate2[:intersection]) / np.sum(rate2)
-detection_skip = np.sum(rate1[intersection:]) / np.sum(rate1)
+if count_for_second:
+    intersection_area_start, intersection_area_end = intersection_area_end, intersection_area_start
+
+intersection = intersection_area_start + np.argmin(np.abs(y1[intersection_area_start:intersection_area_end] - y2[intersection_area_start:intersection_area_end]))
+
+false_alert = np.sum(second[:intersection]) / np.sum(second)
+detection_skip = np.sum(first[intersection:]) / np.sum(first)
 classification_error = false_alert + detection_skip
 
+if count_for_second:
+    false_alert, detection_skip = detection_skip, false_alert
+
 plt.figure(figsize=(8, 8))
-plt.fill_between(x[:intersection], rate2[:intersection], color="khaki")
-plt.fill_between(x[intersection:], rate1[intersection:], color="pink")
-plt.plot(x, rate1)
-plt.plot(x, rate2)
-plt.scatter(x[intersection], rate1[intersection], color="black")
-plt.xlabel(f"False alert: {false_alert:.{4}f} Warning skip: {detection_skip:.{4}f} Classification error: {classification_error:.{4}f}")
+first_color, second_color = ("khaki", "pink") if not count_for_second else ("pink", "khaki")
+plt.fill_between(x[:intersection], second[:intersection], color=first_color)
+plt.fill_between(x[intersection:], first[intersection:], color=second_color)
+plt.plot(x, y1)
+plt.plot(x, y2)
+plt.scatter(x[intersection], y1[intersection], color="black")
+plt.xlabel(f"False alert (khaki): {false_alert:.{4}f} Warning skip (pink): {detection_skip:.{4}f} Classification error: {classification_error:.{4}f}")
 plt.show()
