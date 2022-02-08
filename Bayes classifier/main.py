@@ -19,31 +19,35 @@ pc2 = 1 - pc1
 range = (min(np.min(data1), np.min(data2)), max(np.max(data1), np.max(data2)))
 
 x = np.linspace(range[0], range[1], 10000)
-y1 = stats.norm.pdf(x, mu1, sigma1) * pc1
-y2 = stats.norm.pdf(x, mu2, sigma2) * pc2
 
-intersection_area_start = np.argmax(y1)
-intersection_area_end = np.argmax(y2)
+pxc1, pxc2 = stats.norm.pdf(x, mu1, sigma1), stats.norm.pdf(x, mu2, sigma2)
 
-count_for_second = not intersection_area_start < intersection_area_end
-first, second = (y1, y2) if (intersection_area_start < intersection_area_end) else (y2, y1)
+y1, y2 = pxc1 * pc1, pxc2 * pc2
 
-if count_for_second:
-    intersection_area_start, intersection_area_end = intersection_area_end, intersection_area_start
+y1_max, y2_max = np.argmax(y1), np.argmax(y2)
 
-intersection = intersection_area_start + np.argmin(np.abs(y1[intersection_area_start:intersection_area_end] - y2[intersection_area_start:intersection_area_end]))
+count_for_left = y1_max < y2_max
 
-false_alert = np.sum(second[:intersection]) / np.sum(second)
-detection_skip = np.sum(first[intersection:]) / np.sum(first)
+if count_for_left:
+    intersection = y1_max + np.argmin(np.abs(y1[y1_max:y2_max] - y2[y1_max:y2_max]))
+    false_alert = np.sum(pxc2[:intersection]) / np.sum(pxc2) * pc2
+    detection_skip = np.sum(pxc1[intersection:]) / np.sum(pxc1) * pc1
+else:
+    intersection = y2_max + np.argmin(np.abs(y1[y2_max:y1_max] - y2[y2_max:y1_max]))
+    false_alert = np.sum(pxc2[intersection:]) / np.sum(pxc2) * pc2
+    detection_skip = np.sum(pxc1[:intersection]) / np.sum(pxc1) * pc1
+
 classification_error = false_alert + detection_skip
 
-if count_for_second:
-    false_alert, detection_skip = detection_skip, false_alert
-
 plt.figure(figsize=(8, 8))
-first_color, second_color = ("khaki", "pink") if not count_for_second else ("pink", "khaki")
-plt.fill_between(x[:intersection], second[:intersection], color=first_color)
-plt.fill_between(x[intersection:], first[intersection:], color=second_color)
+
+if count_for_left:
+    plt.fill_between(x[:intersection], y2[:intersection], color="khaki")
+    plt.fill_between(x[intersection:], y1[intersection:], color="pink")
+else:
+    plt.fill_between(x[intersection:], y2[intersection:], color="khaki")
+    plt.fill_between(x[:intersection], y1[:intersection], color="pink")
+
 plt.plot(x, y1)
 plt.plot(x, y2)
 plt.scatter(x[intersection], y1[intersection], color="black")
