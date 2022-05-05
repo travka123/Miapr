@@ -1,0 +1,17 @@
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\bin\Debug\net6.0-windows\SyntaxMethodFW.exe
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\bin\Debug\net6.0-windows\SyntaxMethodFW.deps.json
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\bin\Debug\net6.0-windows\SyntaxMethodFW.runtimeconfig.json
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\bin\Debug\net6.0-windows\SyntaxMethodFW.dll
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\bin\Debug\net6.0-windows\SyntaxMethodFW.pdb
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.Main.resources
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.csproj.GenerateResource.cache
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.AssemblyInfo.cs
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.dll
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\refint\SyntaxMethodFW.dll
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.pdb
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\SyntaxMethodFW.genruntimeconfig.cache
+C:\Users\User\source\repos\SyntaxMethodFW\SyntaxMethodFW\obj\Debug\net6.0-windows\ref\SyntaxMethodFW.dll
